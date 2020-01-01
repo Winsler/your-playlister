@@ -24,17 +24,18 @@
         "@typescript-eslint"
     ],
     "rules": {
-        "react/jsx-filename-extension": [1, { "extensions": [".tsx", ".jsx"] }],
-        "import/extensions": [
-          "error",
-          "ignorePackages",
-          {
-            "js": "never",
-            "jsx": "never",
-            "ts": "never",
-            "tsx": "never"
-          }
-       ]
+      "@typescript-eslint/no-namespace": "off",
+      "react/jsx-filename-extension": [1, { "extensions": [".tsx", ".jsx"] }],
+       "import/extensions": [
+         "error",
+         "ignorePackages",
+         {
+           "js": "never",
+           "jsx": "never",
+           "ts": "never",
+           "tsx": "never"
+         }
+      ]
     },
     "settings": {
         "import/extensions": [".js",".jsx",".ts",".tsx"],
@@ -43,7 +44,8 @@
          },
          "import/resolver": {
              "node": {
-                 "extensions": [".js",".jsx",".ts",".tsx"]
+                 "extensions": [".js",".jsx",".ts",".tsx"],
+                 "paths": ["src"]
              }
          }
     }

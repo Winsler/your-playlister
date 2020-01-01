@@ -1,19 +1,25 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { AppBar, Button } from '@material-ui/core';
 import useStyles from './header.styles';
 
-
 const Header: React.FC = () => {
   const classes = useStyles();
-  const [isLogged, setLogged] = useState<boolean>(false);
 
-  const onLogin = ():void => setLogged((prevState: boolean) => !prevState);
+  const onClick = () => {
+    const GoogleAuth = window.gapi.auth2.getAuthInstance();
+
+    GoogleAuth
+      .signIn({
+        scope: 'https://www.googleapis.com/auth/youtube.force-ssl',
+      })
+      .catch(window.console.log);
+  };
 
   return (
     <AppBar className={classes.header}>
       Hallo
-      <Button onClick={onLogin}>
-        {isLogged ? 'Выйти' : 'Войти'}
+      <Button href="/" onClick={onClick}>
+        Log In
       </Button>
     </AppBar>
   );

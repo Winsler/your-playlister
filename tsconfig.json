@@ -1,5 +1,8 @@
 {
   "compilerOptions": {
+    "baseUrl": "src",
+    "types": ["gapi", "gapi.auth2"],
+    "typeRoots": ["./typings"],
     "target": "es5",
     "lib": [
       "dom",
