@@ -1,11 +1,17 @@
-interface IPlaylist {
-  id: string,
-  title: string,
-  clipCount: number,
+interface IYoutubeEntitie {
+  id: string;
+  title: string;
 }
 
-interface IClip {
-  id: string,
-  title: string,
-  thumbnail: string,
+interface IPlaylist extends IYoutubeEntitie {
+  clipCount: number;
 }
+
+interface IClip extends IYoutubeEntitie {
+  thumbnail: string;
+}
+
+
+type TClips = IClip[];
+
+type TPlaylists = IPlaylist[];

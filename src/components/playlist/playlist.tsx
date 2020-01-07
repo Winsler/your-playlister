@@ -1,35 +1,31 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { List } from '@material-ui/core';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchPlaylistClips } from 'store/clips/actions';
+import * as ClipsSelectors from 'store/playlists/selectors';
+import { TRootState } from 'store';
 import PlaylistSelect from './playlist-select';
 import Clip from '../clip';
 import useStyles from './playlist.styles';
 
-const formClip = (item: any): IClip => ({
-  id: item.id,
-  title: item.snippet.title,
-  thumbnail: item.snippet.thumbnails.default.url,
-});
-
-interface PlaylistProps {
-  title: string,
-  clipCount: number,
-  id: string,
+interface IPlaylistProps {
+  title: string;
+  clipCount: number;
+  id: string;
 }
 
-const Playlist: React.FC<PlaylistProps> = ({ title, clipCount, id }: PlaylistProps) => {
-  const [clips, setClips] = useState<IClip[]>([]);
+
+const Playlist: React.FC<IPlaylistProps> = ({ title, clipCount, id }: IPlaylistProps) => {
+  const dispatch = useDispatch();
+  const selector = (state: TRootState): TClips => (
+    ClipsSelectors.getUserClipsByPlaylistId(state, id)
+  );
+  const clips: TClips = useSelector(selector);
   const classes = useStyles();
 
+
   useEffect(() => {
-    window.gapi.client.youtube.playlistItems
-      .list({ part: 'snippet', mine: true, playlistId: id })
-      .then((r: any) => JSON.parse(r.body))
-      .then((body: any) => body.items)
-      .then((items: any[]) => {
-        const newClips = items.map(formClip);
-        setClips(newClips);
-      })
-      .catch(window.console.log);
+    dispatch(fetchPlaylistClips(id));
   }, [id]);
 
   return (

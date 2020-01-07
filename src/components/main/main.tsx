@@ -1,27 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { getUserPlaylists } from 'store/playlists/actions';
+import * as PlaylistSelectors from 'store/playlists/selectors';
 import Playlist from '../playlist';
 import useStyles from './main.styles';
 
-const formPlaylist = (item: any): IPlaylist => ({
-  id: item.id,
-  title: item.snippet.title,
-  clipCount: 0,
-});
-
 const Main: React.FC = () => {
-  const [playlists, setPlalists] = useState<IPlaylist[]>([]);
   const classes = useStyles();
+  const playlists: IPlaylist[] = useSelector(PlaylistSelectors.getPlaylists);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    window.gapi.client.youtube.playlists
-      .list({ part: 'snippet', mine: true })
-      .then((r: any) => JSON.parse(r.body))
-      .then((body: any) => body.items)
-      .then((items: any[]) => {
-        const newPlaylists = items.map(formPlaylist);
-        setPlalists(newPlaylists);
-      })
-      .catch(window.console.log);
+    dispatch(getUserPlaylists());
   }, []);
 
   return (
