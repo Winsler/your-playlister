@@ -32,7 +32,7 @@ const reducer = (state = defaultState, action: TClipsAction): IClipsBranch => {
       };
 
     case CLIPS_ACTION_TYPES.SUCCESS: {
-      const clips = normalizeClips(action.payload);
+      const clips: IClipsEntities = normalizeClips(action.payload);
 
       return {
         meta: {

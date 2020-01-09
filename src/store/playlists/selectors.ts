@@ -1,24 +1,33 @@
 import { createSelector } from 'reselect';
 import { TRootState } from 'store';
-import { getClips } from 'store/clips/selectors';
+import { getClipsEntities } from 'store/clips/selectors';
 
-// TODO
-const getDataFromProps = (state: TRootState, id: any): any => id;
+
+const getDataFromProps = <T>(state: TRootState, data: T): T => data;
 
 export const getPlaylistsBranch = (state: TRootState): IPlaylistsBranch => state.playlistsEntities;
 
 export const getPlaylists = createSelector(
   [getPlaylistsBranch],
-  (playlists: IPlaylistsBranch): TPlaylists => Object.values(playlists.entities),
+  (plalists: IPlaylistsBranch): TPlaylists => Object.values(plalists.entities),
 );
 
-export const getPlaylistById = createSelector(
+
+export const getPlaylistById = createSelector<
+  TRootState,
+  TRootState,
+  never,
+  string,
+  IPlaylistsBranch,
+  string,
+  IPlaylist
+>(
   [getPlaylistsBranch, getDataFromProps],
   (playlists: IPlaylistsBranch, id: string): IPlaylist => playlists.entities[id],
 );
 
 export const getUserClipsByPlaylistId = createSelector(
-  [getPlaylistById, getClips],
+  [getPlaylistById, getClipsEntities],
   (playlist: IPlaylist, clips: IClipsEntities): TClips => (
     playlist.clips.map((clipId) => clips[clipId])
   ),

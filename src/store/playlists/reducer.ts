@@ -34,7 +34,7 @@ const reducer = (state = defaultState, action: TAction): IPlaylistsBranch => {
       };
 
     case PLAYLIST_ACTION_TYPES.SUCCESS: {
-      const playlists = normalizePlaylists(action.payload);
+      const playlists: IPlaylistEntites = normalizePlaylists(action.payload);
 
       return {
         meta: {

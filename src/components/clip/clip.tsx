@@ -5,12 +5,12 @@ import {
 } from '@material-ui/core';
 import useStyles from './clip.styles';
 
-interface ClipProps {
-  title: string,
-  thumbnail: string,
+interface IClipProps {
+  title: string;
+  thumbnail: string;
 }
 
-const Clip: React.FC<ClipProps> = ({ title, thumbnail }: ClipProps) => {
+const Clip: React.FC<IClipProps> = ({ title, thumbnail }: IClipProps) => {
   const classes = useStyles();
 
   return (

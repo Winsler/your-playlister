@@ -5,7 +5,7 @@ import useStyles from './header.styles';
 const Header: React.FC = () => {
   const classes = useStyles();
 
-  const onClick = () => {
+  const onClick = (): void => {
     const GoogleAuth = window.gapi.auth2.getAuthInstance();
 
     GoogleAuth

@@ -7,7 +7,7 @@ import useStyles from './main.styles';
 
 const Main: React.FC = () => {
   const classes = useStyles();
-  const playlists: IPlaylist[] = useSelector(PlaylistSelectors.getPlaylists);
+  const playlists: TPlaylists = useSelector(PlaylistSelectors.getPlaylists);
   const dispatch = useDispatch();
 
   useEffect(() => {
