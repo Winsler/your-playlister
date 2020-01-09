@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './components';
 
-const loadDom = () => {
+const loadDom = (): void => {
   ReactDOM.render(
     <App />,
     document.getElementById('root'),
@@ -16,7 +16,7 @@ script.addEventListener('load', () => {
   window.gapi.load('client:auth2', () => {
     window.gapi.client
       .init({
-        clientId: process.env.REACT_APP_YOUTUBE_CLIENT_ID!,
+        clientId: process.env.REACT_APP_YOUTUBE_CLIENT_ID,
         scope: 'https://www.googleapis.com/auth/youtube.force-ssl',
       })
       .then(() => {

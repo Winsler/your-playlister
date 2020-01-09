@@ -12,10 +12,7 @@ export interface IClipsFetching {
 
 export interface IClipsSuccess {
   type: typeof CLIPS_ACTION_TYPES.SUCCESS;
-  payload: {
-    clips: TClips;
-    playlistId: string;
-  };
+  payload: TResponseClips;
 }
 
 export interface IClipsFailure {

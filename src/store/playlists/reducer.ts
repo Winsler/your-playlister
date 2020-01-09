@@ -1,4 +1,5 @@
 import CLIPS_ACTION_TYPES, { TClipsAction } from 'store/clips/types';
+import { normalizePlaylists } from 'utils/normolize';
 import PLAYLIST_ACTION_TYPES, { TPlaylistAction } from './types';
 
 const defaultState: IPlaylistsBranch = {
@@ -32,22 +33,25 @@ const reducer = (state = defaultState, action: TAction): IPlaylistsBranch => {
         },
       };
 
-    case PLAYLIST_ACTION_TYPES.SUCCESS:
+    case PLAYLIST_ACTION_TYPES.SUCCESS: {
+      const playlists = normalizePlaylists(action.payload);
+
       return {
         meta: {
           isError: false,
           isFetching: false,
         },
-        allEntities: action.payload.map((playlist) => playlist.id),
-        entities: action.payload.reduce((acc, playlist) => ({
-          ...acc,
-          [playlist.id]: playlist,
-        }), {}),
+        allEntities: [...state.allEntities, ...Object.keys(playlists)],
+        entities: {
+          ...state.entities,
+          ...playlists,
+        },
       };
+    }
 
     case CLIPS_ACTION_TYPES.SUCCESS: {
-      const { playlistId } = action.payload;
-      const clipIds: string[] = action.payload.clips.map((item: IClip) => item.id);
+      const { playlistId } = action.payload[0].snippet;
+      const clipIds: string[] = action.payload.map((item: IResponseClip) => item.id);
 
       return {
         ...state,

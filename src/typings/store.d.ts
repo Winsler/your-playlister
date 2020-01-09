@@ -6,20 +6,18 @@ interface IBranch {
   allEntities: string[];
 }
 
-interface IClipsEntities {
-  [id: string]: IClip;
-}
-
 interface IClipsBranch extends IBranch {
   entities: IClipsEntities;
 }
 
-interface IPlaylistInStore extends IPlaylist {
-  clips: string[];
+interface IPlaylistsBranch extends IBranch {
+  entities: IPlaylistEntites;
 }
 
-interface IPlaylistsBranch extends IBranch {
-  entities: {
-    [id: string]: IPlaylistInStore;
-  };
+interface IPlaylistEntites {
+  [id: string]: IPlaylist;
+}
+
+interface IClipsEntities {
+  [id: string]: IClip;
 }

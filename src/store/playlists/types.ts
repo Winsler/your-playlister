@@ -12,7 +12,7 @@ export interface IPlaylistFetching {
 
 export interface IPlaylistSuccess {
   type: typeof PLAYLIST_ACTION_TYPES.SUCCESS;
-  payload: TPlaylists;
+  payload: TResponsePlaylists;
 }
 
 export interface IPlaylistFailure {

@@ -1,3 +1,4 @@
+import { normalizeClips } from 'utils/normolize';
 import CLIPS_ACTION_TYPES, { TClipsAction } from './types';
 
 const defaultState: IClipsBranch = {
@@ -31,21 +32,18 @@ const reducer = (state = defaultState, action: TClipsAction): IClipsBranch => {
       };
 
     case CLIPS_ACTION_TYPES.SUCCESS: {
-      const newEntities = action.payload.clips.reduce((acc, clip) => ({
-        ...acc,
-        [clip.id]: clip,
-      }), {});
+      const clips = normalizeClips(action.payload);
 
       return {
-        allEntities: action.payload.clips.map((clip) => clip.id),
         meta: {
           isError: false,
           isFetching: false,
         },
         entities: {
           ...state.entities,
-          ...newEntities,
+          ...clips,
         },
+        allEntities: [...state.allEntities, ...Object.keys(clips)],
       };
     }
 

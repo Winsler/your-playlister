@@ -4,14 +4,6 @@ import PLAYLIST_ACTION_TYPES, {
 } from './types';
 
 
-const formPlaylist = (item: IResponsePlaylist): IPlaylistInStore => ({
-  id: item.id,
-  title: item.snippet.title,
-  clipCount: 0,
-  clips: [],
-});
-
-
 const playlistsFetch = (): IPlaylistFetching => ({
   type: PLAYLIST_ACTION_TYPES.FETCHING,
 });
@@ -19,7 +11,7 @@ const playlistsFetch = (): IPlaylistFetching => ({
 
 const playlistsSuccess = (items: TResponsePlaylists): IPlaylistSuccess => ({
   type: PLAYLIST_ACTION_TYPES.SUCCESS,
-  payload: items.map(formPlaylist),
+  payload: items,
 });
 
 

@@ -4,13 +4,6 @@ import CLIPS_ACTION_TYPES, {
 } from './types';
 
 
-const formClip = (item: IResponseClip): IClip => ({
-  id: item.id,
-  title: item.snippet.title,
-  thumbnail: item.snippet.thumbnails.default.url,
-});
-
-
 const clipsFetch = (): IClipsFetching => ({
   type: CLIPS_ACTION_TYPES.FETCHING,
 });
@@ -18,10 +11,7 @@ const clipsFetch = (): IClipsFetching => ({
 
 const clipsSuccess = (items: TResponseClips): IClipsSuccess => ({
   type: CLIPS_ACTION_TYPES.SUCCESS,
-  payload: {
-    clips: items.map(formClip),
-    playlistId: items[0].snippet.playlistId,
-  },
+  payload: items,
 });
 
 
@@ -46,8 +36,6 @@ export const fetchPlaylistClips = (playlistId: string) => (
       });
 
       const { items } = JSON.parse(resp.body);
-
-      // window.console.log(items);
 
       dispatch(clipsSuccess(items));
     } catch (e) {

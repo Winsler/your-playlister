@@ -14,12 +14,12 @@ export const getPlaylists = createSelector(
 
 export const getPlaylistById = createSelector(
   [getPlaylistsBranch, getDataFromProps],
-  (playlists: IPlaylistsBranch, id: string): IPlaylistInStore => playlists.entities[id],
+  (playlists: IPlaylistsBranch, id: string): IPlaylist => playlists.entities[id],
 );
 
 export const getUserClipsByPlaylistId = createSelector(
   [getPlaylistById, getClips],
-  (playlist: IPlaylistInStore, clips: IClipsEntities): TClips => (
+  (playlist: IPlaylist, clips: IClipsEntities): TClips => (
     playlist.clips.map((clipId) => clips[clipId])
   ),
 );
