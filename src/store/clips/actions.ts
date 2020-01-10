@@ -1,41 +1,35 @@
 import { Dispatch } from 'react';
+import YoutubeApi from 'services/youtube-api';
 import CLIPS_ACTION_TYPES, {
   IClipsFailure, IClipsFetching, IClipsSuccess, TClipsAction,
 } from './types';
 
 
-const clipsFetch = (): IClipsFetching => ({
+export const clipsFetch = (): IClipsFetching => ({
   type: CLIPS_ACTION_TYPES.FETCHING,
 });
 
 
-const clipsSuccess = (items: TResponseClips): IClipsSuccess => ({
+export const clipsSuccess = (items: TResponseClips): IClipsSuccess => ({
   type: CLIPS_ACTION_TYPES.SUCCESS,
   payload: items,
 });
 
 
-const clipsFailure = (e: Error): IClipsFailure => ({
+export const clipsFailure = (e: Error): IClipsFailure => ({
   type: CLIPS_ACTION_TYPES.FAILURE,
   payload: e.message,
 });
 
 
-// eslint-disable-next-line import/prefer-default-export
 export const fetchPlaylistClips = (playlistId: string) => (
   async (dispatch: Dispatch<TClipsAction>): Promise<void> => {
     dispatch(clipsFetch());
 
-    const { youtube } = window.gapi.client;
+    const youtubeApi: IYoutubeApi = new YoutubeApi();
 
     try {
-      const resp = await youtube.playlistItems.list({
-        part: 'snippet',
-        mine: true,
-        playlistId,
-      });
-
-      const { items } = JSON.parse(resp.body);
+      const items = await youtubeApi.getClips(playlistId);
 
       dispatch(clipsSuccess(items));
     } catch (e) {

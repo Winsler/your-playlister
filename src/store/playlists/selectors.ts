@@ -1,34 +1,47 @@
 import { createSelector } from 'reselect';
 import { TRootState } from 'store';
 import { getClipsEntities } from 'store/clips/selectors';
+import { getDataFromProps } from 'utils/misc';
+import { Selector } from 'react-redux';
 
-
-const getDataFromProps = <T>(state: TRootState, data: T): T => data;
 
 export const getPlaylistsBranch = (state: TRootState): IPlaylistsBranch => state.playlistsEntities;
 
-export const getPlaylists = createSelector(
+
+export const getPlaylistEntities = createSelector(
   [getPlaylistsBranch],
-  (plalists: IPlaylistsBranch): TPlaylists => Object.values(plalists.entities),
+  (branch: IPlaylistsBranch): IPlaylistEntites => branch.entities,
+);
+
+
+export const getPlaylists = createSelector(
+  [getPlaylistEntities],
+  (entities: IPlaylistEntites): TPlaylists => Object.values(entities),
 );
 
 
 export const getPlaylistById = createSelector<
   TRootState,
   TRootState,
-  never,
   string,
-  IPlaylistsBranch,
+  string,
+  IPlaylistEntites,
   string,
   IPlaylist
 >(
-  [getPlaylistsBranch, getDataFromProps],
-  (playlists: IPlaylistsBranch, id: string): IPlaylist => playlists.entities[id],
+  [getPlaylistEntities, getDataFromProps],
+  (entities: IPlaylistEntites, id: string): IPlaylist => entities[id],
 );
 
-export const getUserClipsByPlaylistId = createSelector(
-  [getPlaylistById, getClipsEntities],
-  (playlist: IPlaylist, clips: IClipsEntities): TClips => (
-    playlist.clips.map((clipId) => clips[clipId])
-  ),
-);
+
+export const createSelectorGetUserClipsByPlaylistId = (id: string): Selector<
+  TRootState, TClips
+> => {
+  const getPlaylistByIdBined = (state: TRootState): IPlaylist => getPlaylistById(state, id);
+  return createSelector(
+    [getPlaylistByIdBined, getClipsEntities],
+    (playlist: IPlaylist, clips: IClipsEntities): TClips => (
+      playlist.clips.map((clip) => clips[clip])
+    ),
+  );
+};

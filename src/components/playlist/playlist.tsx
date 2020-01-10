@@ -1,9 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useMemo } from 'react';
 import { List } from '@material-ui/core';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchPlaylistClips } from 'store/clips/actions';
-import * as ClipsSelectors from 'store/playlists/selectors';
-import { TRootState } from 'store';
+import { useSelector } from 'react-redux';
+import { createSelectorGetUserClipsByPlaylistId } from 'store/playlists/selectors';
 import PlaylistSelect from './playlist-select';
 import Clip from '../clip';
 import useStyles from './playlist.styles';
@@ -16,17 +14,11 @@ interface IPlaylistProps {
 
 
 const Playlist: React.FC<IPlaylistProps> = ({ title, clipCount, id }: IPlaylistProps) => {
-  const dispatch = useDispatch();
-  const selector = (state: TRootState): TClips => (
-    ClipsSelectors.getUserClipsByPlaylistId(state, id)
-  );
+  const selector = useMemo(() => createSelectorGetUserClipsByPlaylistId(id), [id]);
+
   const clips: TClips = useSelector(selector);
   const classes = useStyles();
 
-
-  useEffect(() => {
-    dispatch(fetchPlaylistClips(id));
-  }, [id]);
 
   return (
     <section className={classes.playlist}>

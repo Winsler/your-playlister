@@ -1,45 +1,74 @@
 import { Dispatch } from 'react';
+import { batch } from 'react-redux';
+import YoutubeApi from 'services/youtube-api';
+import * as ClipsActions from 'store/clips/actions';
+import { TClipsAction } from 'store/clips/types';
 import PLAYLIST_ACTION_TYPES, {
   IPlaylistFailure, IPlaylistFetching, IPlaylistSuccess, TPlaylistAction,
 } from './types';
 
 
-const playlistsFetch = (): IPlaylistFetching => ({
+export const playlistsFetch = (): IPlaylistFetching => ({
   type: PLAYLIST_ACTION_TYPES.FETCHING,
 });
 
 
-const playlistsSuccess = (items: TResponsePlaylists): IPlaylistSuccess => ({
+export const playlistsSuccess = (items: TResponsePlaylists): IPlaylistSuccess => ({
   type: PLAYLIST_ACTION_TYPES.SUCCESS,
   payload: items,
 });
 
 
-const playlistsFailure = (e: Error): IPlaylistFailure => ({
+export const playlistsFailure = (e: Error): IPlaylistFailure => ({
   type: PLAYLIST_ACTION_TYPES.FAILURE,
   payload: e.message,
 });
 
 
-// eslint-disable-next-line import/prefer-default-export
 export const getUserPlaylists = () => (
   async (dispatch: Dispatch<TPlaylistAction>): Promise<void> => {
     dispatch(playlistsFetch());
 
-    const { youtube } = window.gapi.client;
+    const youtubeApi: IYoutubeApi = new YoutubeApi();
 
     try {
-      const resp = await youtube.playlists.list({
-        part: 'snippet',
-        mine: true,
-      });
-
-      const { items } = JSON.parse(resp.body);
+      const items = await youtubeApi.getPlaylists();
 
       dispatch(playlistsSuccess(items));
     } catch (e) {
       window.console.log(e);
       dispatch(playlistsFailure(e));
+    }
+  }
+);
+
+
+export const getUserPlaylistsAndClips = () => (
+  async (dispatch: Dispatch<TPlaylistAction | TClipsAction>): Promise<void> => {
+    batch(() => {
+      dispatch(playlistsFetch());
+      dispatch(ClipsActions.clipsFetch());
+    });
+
+    const youtubeApi: IYoutubeApi = new YoutubeApi();
+
+    try {
+      const playlistItems = await youtubeApi.getPlaylists();
+
+      const playlistsIds = playlistItems.map((item) => item.id);
+
+      const clipsItems = await Promise.all(playlistsIds.map((id) => youtubeApi.getClips(id)));
+
+      batch(() => {
+        dispatch(playlistsSuccess(playlistItems));
+        clipsItems.forEach((item) => dispatch(ClipsActions.clipsSuccess(item)));
+      });
+    } catch (e) {
+      window.console.log(e.message);
+      batch(() => {
+        dispatch(playlistsFailure(e));
+        dispatch(ClipsActions.clipsFailure(e));
+      });
     }
   }
 );
