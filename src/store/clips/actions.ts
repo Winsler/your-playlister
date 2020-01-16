@@ -29,7 +29,7 @@ export const fetchPlaylistClips = (playlistId: string) => (
     const youtubeApi: IYoutubeApi = new YoutubeApi();
 
     try {
-      const items = await youtubeApi.getClips(playlistId);
+      const items: TResponseClips = await youtubeApi.getClips(playlistId);
 
       dispatch(clipsSuccess(items));
     } catch (e) {

@@ -1,3 +1,24 @@
+/* eslint-disable camelcase */
+interface IPlaylistItemsResource extends gapi.client.youtube.PlaylistItemsResource {
+  list(request: {
+    alt?: string;
+    fields?: string;
+    id?: string;
+    key?: string;
+    maxResults?: number;
+    oauth_token?: string;
+    onBehalfOfContentOwner?: string;
+    pageToken?: string;
+    part: string;
+    playlistId?: string;
+    prettyPrint?: boolean;
+    quotaUser?: string;
+    userIp?: string;
+    videoId?: string;
+    mine?: boolean;
+  }): Request<PlaylistItemListResponse>;
+}
+
 declare namespace gapi.client.youtube {
   const activities: youtube.ActivitiesResource;
   const captions: youtube.CaptionsResource;
@@ -15,7 +36,7 @@ declare namespace gapi.client.youtube {
   const liveChatMessages: youtube.LiveChatMessagesResource;
   const liveChatModerators: youtube.LiveChatModeratorsResource;
   const liveStreams: youtube.LiveStreamsResource;
-  const playlistItems: youtube.PlaylistItemsResource;
+  const playlistItems: IPlaylistItemsResource;
   const playlists: youtube.PlaylistsResource;
   const search: youtube.SearchResource;
   const sponsors: youtube.SponsorsResource;
