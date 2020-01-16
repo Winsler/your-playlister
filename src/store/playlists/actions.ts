@@ -43,12 +43,29 @@ export const getUserPlaylists = () => (
 );
 
 
+export const playlistAndClipsFetch = () => (
+  dispatch: Dispatch<TPlaylistAction | TClipsAction>,
+): void => {
+  batch(() => {
+    dispatch(playlistsFetch());
+    dispatch(ClipsActions.clipsFetch());
+  });
+};
+
+export const playlistAndClipsFailure = (e: Error) => (
+  dispatch: Dispatch<TPlaylistAction | TClipsAction>,
+): void => {
+  window.console.log(e.message);
+  batch(() => {
+    dispatch(playlistsFailure(e));
+    dispatch(ClipsActions.clipsFailure(e));
+  });
+};
+
+
 export const getUserPlaylistsAndClips = () => (
   async (dispatch: Dispatch<TPlaylistAction | TClipsAction>): Promise<void> => {
-    batch(() => {
-      dispatch(playlistsFetch());
-      dispatch(ClipsActions.clipsFetch());
-    });
+    playlistAndClipsFetch()(dispatch);
 
     const youtubeApi: IYoutubeApi = new YoutubeApi();
 
@@ -64,11 +81,7 @@ export const getUserPlaylistsAndClips = () => (
         clipsItems.forEach((item) => dispatch(ClipsActions.clipsSuccess(item)));
       });
     } catch (e) {
-      window.console.log(e.message);
-      batch(() => {
-        dispatch(playlistsFailure(e));
-        dispatch(ClipsActions.clipsFailure(e));
-      });
+      playlistAndClipsFailure(e)(dispatch);
     }
   }
 );
