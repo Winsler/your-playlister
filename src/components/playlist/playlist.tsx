@@ -2,18 +2,20 @@ import React, { useMemo } from 'react';
 import { List } from '@material-ui/core';
 import { useSelector } from 'react-redux';
 import { createSelectorGetUserClipsByPlaylistId } from 'store/playlists/selectors';
+import { withDroppable } from 'hocs';
 import PlaylistSelect from './playlist-select';
 import Clip from '../clip';
 import useStyles from './playlist.styles';
 
-interface IPlaylistProps {
+
+export interface IPlaylistProps {
   title: string;
   clipCount: number;
   id: string;
 }
 
 
-const Playlist: React.FC<IPlaylistProps> = ({ title, clipCount, id }: IPlaylistProps) => {
+export const Playlist: React.FC<IPlaylistProps> = ({ title, clipCount, id }: IPlaylistProps) => {
   const selector = useMemo(() => createSelectorGetUserClipsByPlaylistId(id), [id]);
 
   const clips: TClips = useSelector(selector);
@@ -29,8 +31,10 @@ const Playlist: React.FC<IPlaylistProps> = ({ title, clipCount, id }: IPlaylistP
       <PlaylistSelect />
       <List>
         {
-          clips.map(({ title: clipTitle, thumbnail, id: clipId }) => (
-            <li key={clipId}><Clip title={clipTitle} thumbnail={thumbnail} /></li>
+          clips.map(({ title: clipTitle, thumbnail, id: clipId }, idx) => (
+            <li key={clipId}>
+              <Clip id={clipId} title={clipTitle} thumbnail={thumbnail} index={idx} />
+            </li>
           ))
         }
       </List>
@@ -38,4 +42,5 @@ const Playlist: React.FC<IPlaylistProps> = ({ title, clipCount, id }: IPlaylistP
   );
 };
 
-export default Playlist;
+
+export default withDroppable(Playlist);

@@ -2,6 +2,7 @@ import CLIPS_ACTION_TYPES, { TClipsAction } from 'store/clips/types';
 import { normalizePlaylists } from 'utils/normolize';
 import PLAYLIST_ACTION_TYPES, { TPlaylistAction } from './types';
 
+
 const defaultState: IPlaylistsBranch = {
   meta: {
     isError: false,
@@ -12,6 +13,23 @@ const defaultState: IPlaylistsBranch = {
 };
 
 type TAction = TPlaylistAction | TClipsAction;
+
+type TClips = IPlaylistsBranch['entities']['']['clips'];
+
+
+const addClips = (clips: TClips, idx: number, newClips: TClips): TClips => (
+  [
+    ...clips.slice(0, idx),
+    ...newClips,
+    ...clips.slice(idx),
+  ]
+);
+
+
+const deleteClips = (clips: TClips, clipsToDelete: TClips): TClips => (
+  clips.filter((clip) => !clipsToDelete.includes(clip))
+);
+
 
 const reducer = (state = defaultState, action: TAction): IPlaylistsBranch => {
   switch (action.type) {
@@ -61,6 +79,28 @@ const reducer = (state = defaultState, action: TAction): IPlaylistsBranch => {
             ...state.entities[playlistId],
             clips: clipIds,
             clipCount: clipIds.length,
+          },
+        },
+      };
+    }
+
+    case CLIPS_ACTION_TYPES.MOVE: {
+      const {
+        fromId, toId, fromPosition, toPosition,
+      } = action.payload;
+      const clipId = state.entities[fromId].clips[fromPosition];
+
+      return {
+        ...state,
+        entities: {
+          ...state.entities,
+          [fromId]: {
+            ...state.entities[fromId],
+            clips: deleteClips(state.entities[fromId].clips, [clipId]),
+          },
+          [toId]: {
+            ...state.entities[toId],
+            clips: addClips(state.entities[toId].clips, toPosition, [clipId]),
           },
         },
       };

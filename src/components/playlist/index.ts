@@ -1,3 +1,3 @@
-import Playlist from './playlist';
+import DroppablePlaylist from './playlist';
 
-export default Playlist;
+export default DroppablePlaylist;

@@ -1,6 +1,7 @@
 import { normalizeClips } from 'utils/normolize';
 import CLIPS_ACTION_TYPES, { TClipsAction } from './types';
 
+
 const defaultState: IClipsBranch = {
   meta: {
     isError: false,
@@ -32,7 +33,7 @@ const reducer = (state = defaultState, action: TClipsAction): IClipsBranch => {
       };
 
     case CLIPS_ACTION_TYPES.SUCCESS: {
-      const clips: IClipsEntities = normalizeClips(action.payload);
+      const newEntities: IClipsEntities = normalizeClips(action.payload);
 
       return {
         meta: {
@@ -41,9 +42,9 @@ const reducer = (state = defaultState, action: TClipsAction): IClipsBranch => {
         },
         entities: {
           ...state.entities,
-          ...clips,
+          ...newEntities,
         },
-        allEntities: [...state.allEntities, ...Object.keys(clips)],
+        allEntities: [...state.allEntities, ...Object.keys(newEntities)],
       };
     }
 

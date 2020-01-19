@@ -3,14 +3,17 @@ import {
   Card, CardActionArea, CardMedia, CardActions,
   Typography, Button,
 } from '@material-ui/core';
+import { withDraggabe } from 'hocs';
 import useStyles from './clip.styles';
 
-interface IClipProps {
+
+export interface IClipProps {
   title: string;
   thumbnail: string;
 }
 
-const Clip: React.FC<IClipProps> = ({ title, thumbnail }: IClipProps) => {
+
+export const Clip: React.FC<IClipProps> = ({ title, thumbnail }: IClipProps) => {
   const classes = useStyles();
 
   return (
@@ -34,4 +37,5 @@ const Clip: React.FC<IClipProps> = ({ title, thumbnail }: IClipProps) => {
   );
 };
 
-export default Clip;
+
+export default withDraggabe<IClipProps>(Clip);

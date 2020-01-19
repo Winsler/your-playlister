@@ -1,3 +1,3 @@
-import Clip from './clip';
+import DraggableClip from './clip';
 
-export default Clip;
+export default DraggableClip;
