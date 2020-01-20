@@ -1,7 +1,7 @@
 import { Dispatch } from 'react';
 import YoutubeApi from 'services/youtube-api';
 import CLIPS_ACTION_TYPES, {
-  IClipsFailure, IClipsFetching, IClipsSuccess, TClipsAction, IClipMove,
+  IClipsFailure, IClipsFetching, IClipsSuccess, TClipsAction, IClipsMove, IClipsDelete,
 } from './types';
 
 
@@ -45,9 +45,15 @@ export const moveClipToPlaylist = (
   toId: string,
   fromPosition: number,
   toPosition: number,
-): IClipMove => ({
+): IClipsMove => ({
   type: CLIPS_ACTION_TYPES.MOVE,
   payload: {
     fromId, toId, fromPosition, toPosition,
   },
+});
+
+
+export const deleteClip = (clip: string): IClipsDelete => ({
+  type: CLIPS_ACTION_TYPES.DELETE,
+  payload: [clip],
 });

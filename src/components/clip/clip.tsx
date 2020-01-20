@@ -1,20 +1,28 @@
-import React from 'react';
+import React, { useCallback } from 'react';
+import { useDispatch } from 'react-redux';
 import {
   Card, CardActionArea, CardMedia, CardActions,
   Typography, Button,
 } from '@material-ui/core';
 import { withDraggabe } from 'hocs';
+import { deleteClip } from 'store/clips/actions';
 import useStyles from './clip.styles';
 
 
 export interface IClipProps {
   title: string;
   thumbnail: string;
+  id: string;
 }
 
 
-export const Clip: React.FC<IClipProps> = ({ title, thumbnail }: IClipProps) => {
+export const Clip: React.FC<IClipProps> = ({ title, thumbnail, id }: IClipProps) => {
   const classes = useStyles();
+  const dispatch = useDispatch();
+
+  const onDelete = useCallback((): void => {
+    dispatch(deleteClip(id));
+  }, [id, dispatch]);
 
   return (
     <Card className={classes.clipCard}>
@@ -29,7 +37,7 @@ export const Clip: React.FC<IClipProps> = ({ title, thumbnail }: IClipProps) => 
         </Typography>
       </CardActionArea>
       <CardActions>
-        <Button size="small" color="primary">
+        <Button size="small" color="primary" onClick={onDelete}>
           Delete
         </Button>
       </CardActions>

@@ -1,4 +1,5 @@
 import { normalizeClips } from 'utils/normolize';
+import { deleteClips, deleteClipsEntities } from 'utils/misc';
 import CLIPS_ACTION_TYPES, { TClipsAction } from './types';
 
 
@@ -45,6 +46,14 @@ const reducer = (state = defaultState, action: TClipsAction): IClipsBranch => {
           ...newEntities,
         },
         allEntities: [...state.allEntities, ...Object.keys(newEntities)],
+      };
+    }
+
+    case CLIPS_ACTION_TYPES.DELETE: {
+      return {
+        ...state,
+        entities: deleteClipsEntities(state.entities, action.payload),
+        allEntities: deleteClips(state.allEntities, action.payload),
       };
     }
 

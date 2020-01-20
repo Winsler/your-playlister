@@ -21,3 +21,6 @@ interface IClipsBranch extends IBranch {
 interface IPlaylistsBranch extends IBranch {
   entities: IPlaylistEntites;
 }
+
+
+type TAllClipsEntities = IBranch['allEntities'];

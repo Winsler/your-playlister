@@ -1,10 +1,10 @@
 import { useCallback, Dispatch } from 'react';
-import { IClipMove } from 'store/clips/types';
+import { IClipsMove } from 'store/clips/types';
 import { DropResult } from 'react-beautiful-dnd';
 import { moveClipToPlaylist as moveClipToPlaylistDefault } from 'store/clips/actions';
 
 
-export const moveClipToPlaylist = ({ source, destination }: DropResult): IClipMove | undefined => {
+export const moveClipToPlaylist = ({ source, destination }: DropResult): IClipsMove | undefined => {
   if (!destination) {
     return undefined;
   }
@@ -16,7 +16,7 @@ export const moveClipToPlaylist = ({ source, destination }: DropResult): IClipMo
 };
 
 
-export const useGetClipMoveHandler = (dispatch: Dispatch<IClipMove>): (e: DropResult) => void => (
+export const useGetClipMoveHandler = (dispatch: Dispatch<IClipsMove>): (e: DropResult) => void => (
   useCallback((dropEvent: DropResult): void => {
     const action = moveClipToPlaylist(dropEvent);
     if (action) {

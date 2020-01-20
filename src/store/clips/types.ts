@@ -3,6 +3,7 @@ enum CLIPS_ACTION_TYPES {
   SUCCESS = 'CLIPS_SUCCESS',
   FAILURE = 'CLIPS_FAILURE',
   MOVE = 'CLIPS_MOVE',
+  DELETE = 'CLIPS_DELETE',
 }
 
 export default CLIPS_ACTION_TYPES;
@@ -21,7 +22,7 @@ export interface IClipsFailure {
   payload: string;
 }
 
-export interface IClipMove {
+export interface IClipsMove {
   type: typeof CLIPS_ACTION_TYPES.MOVE;
   payload: {
     fromId: string;
@@ -31,4 +32,11 @@ export interface IClipMove {
   };
 }
 
-export type TClipsAction = IClipsFetching | IClipsSuccess | IClipsFailure | IClipMove;
+export interface IClipsDelete {
+  type: typeof CLIPS_ACTION_TYPES.DELETE;
+  payload: IPlaylist['clips'];
+}
+
+export type TClipsAction = (
+  IClipsFetching | IClipsSuccess | IClipsFailure | IClipsMove | IClipsDelete
+);

@@ -20,7 +20,7 @@ const withDraggabe = <P extends object>(Wrapped: React.ComponentType<P>) => ({
           {...provided.draggableProps}
           {...provided.dragHandleProps}
         >
-          <Wrapped {...restProps as P} />
+          <Wrapped id={id} {...restProps as P} />
         </div>
       )
     }
